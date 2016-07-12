@@ -23,7 +23,7 @@
         android:text="SUBMIT"
         android:id="@+id/button"
         android:onClick="submit"
-        android:background="@drawable/images"
+        android:background="@drawable/button"
         android:layout_below="@+id/radioGroup" />
 
     <EditText
@@ -53,9 +53,10 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="female"
+            android:text=""
             android:id="@+id/femaleradioButton"
-            android:checked="false" />
+            android:checked="false"
+            android:drawableRight="@drawable/images" />
 
     </RadioGroup>
 </RelativeLayout>
