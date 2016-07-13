@@ -41,18 +41,33 @@ public class OrderAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
     //convertView如果已經讀過第0筆，不用重新new一個view
     //Viewgroup 把同樣分類分層
-        if(convertView == null){
-            convertView = layoutInflater.inflate(R.layout.listview_order_item,null);//R.layout.item 是int
-        }
-        TextView noteTextView = (TextView)convertView.findViewById(R.id.noteTextView);
-        TextView storeInfoTextView = (TextView)convertView.findViewById(R.id.storeNameTextView);
-        TextView drinkNameTextView = (TextView)convertView.findViewById(R.id.drinkNameTextView);
+        Holder holder;
 
+        if(convertView == null){
+            convertView = layoutInflater.inflate(R.layout.listview_order_item,null);//R.layout.item 是int，inflater，把xml檔轉化成一個view，parent=null
+            TextView noteTextView = (TextView)convertView.findViewById(R.id.noteTextView);
+            TextView storeInfoTextView = (TextView)convertView.findViewById(R.id.storeNameTextView);
+            TextView drinkNameTextView = (TextView)convertView.findViewById(R.id.drinkNameTextView);
+
+            holder = new Holder();
+            holder.drinkNameTextView = drinkNameTextView;
+            holder.noteTextView = noteTextView;
+            holder.storeInfoTextView = storeInfoTextView;
+
+            convertView.setTag(holder);
+        }else{
+            holder = (Holder)convertView.getTag();
+        }
         Order order = orders.get(position);
-        noteTextView.setText(order.note);
-        storeInfoTextView.setText(order.storeInfo);
-        drinkNameTextView.setText(order.drinkName);
+        holder.noteTextView.setText(order.note);
+        holder.storeInfoTextView.setText(order.storeInfo);
+        holder.drinkNameTextView.setText(order.drinkName);
 
         return convertView;
+    }
+    class Holder{//不用一直findViewById
+        TextView noteTextView;
+        TextView storeInfoTextView;
+        TextView drinkNameTextView;
     }
 }
