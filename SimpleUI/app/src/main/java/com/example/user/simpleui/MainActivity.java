@@ -12,6 +12,9 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     TextView textView;
@@ -21,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     Spinner spinner;
 
     String selectTea = "black tea";
+
+    List<Order> orders = new ArrayList<>();//放訂單的位置
 
 
     @Override
@@ -62,9 +67,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void setupListView()
     {
-        String[] data = new String[]{"black tea","grean tea","1","2","3","4","5"};
+        //String[] data = new String[]{"black tea","grean tea","1","2","3","4","5"};測試data
         //adapter轉換器
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,data);//simple_list_item_1 android自訂UI(第二個是layout檔) 存進layout(第三個)
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,data);//simple_list_item_1 android自訂UI(第二個是layout檔) 存進layout(第三個)
+
+        OrderAdapter adapter = new OrderAdapter(this,orders);
         listView.setAdapter(adapter);
     }
 
@@ -81,10 +88,18 @@ public class MainActivity extends AppCompatActivity {
         //textView.setText("Hello Everyone");
         String text = editText.getText().toString();//須轉型String，並把值放入text
 
-
-
         textView.setText(text);//把text放入textview
 
+        Order order = new Order();
+        order.note = text;
+        order.drinkName = selectTea;
+        order.storeInfo = (String)spinner.getSelectedItem();
+
+        orders.add(order);
+
+        setupListView();
+
         editText.setText("");//清空editText
+
     }
 }
