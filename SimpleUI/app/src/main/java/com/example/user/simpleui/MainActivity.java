@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -14,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     EditText editText;
     RadioGroup radioGroup;
 
-    String selectSet = "男";
+    String selectTea = "black tea";
 
 
     @Override
@@ -42,11 +43,8 @@ public class MainActivity extends AppCompatActivity {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {//當勾選改變，則改變觸發事件
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if(checkedId == R.id.maleradioButton){
-                    selectSet = "男";
-                }else if(checkedId == R.id.femaleradioButton ){
-                    selectSet = "女";
-                }
+                RadioButton radioButton = (RadioButton)group.findViewById(checkedId);
+                selectTea = radioButton.getText().toString();
             }
         });
     }
@@ -57,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         //textView.setText("Hello Everyone");
         String text = editText.getText().toString();//須轉型String，並把值放入text
 
-        text = text+"  性別:"+selectSet;
+
 
         textView.setText(text);//把text放入textview
 

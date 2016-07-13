@@ -20,10 +20,9 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SUBMIT"
+        android:text="CLICK"
         android:id="@+id/button"
         android:onClick="submit"
-        android:background="@drawable/button"
         android:layout_below="@+id/radioGroup" />
 
     <EditText
@@ -41,22 +40,22 @@
         android:layout_alignParentStart="true"
         android:orientation="horizontal"
         android:layout_below="@+id/editText"
-        android:id="@+id/radioGroup">
+        android:id="@+id/radioGroup"
+        android:weightSum="1">
 
         <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="male"
-            android:id="@+id/maleradioButton"
-            android:checked="true" />
+            android:layout_width="106dp"
+            android:layout_height="117dp"
+            android:id="@+id/blackTeadioButton"
+            android:checked="true"
+            android:text="black tea" />
 
         <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:id="@+id/femaleradioButton"
-            android:checked="false"
-            android:drawableRight="@drawable/images" />
+            android:layout_width="106dp"
+            android:layout_height="117dp"
+            android:text="grean tea"
+            android:id="@+id/greanTearadioButton"
+            android:checked="false" />
 
     </RadioGroup>
 </RelativeLayout>
