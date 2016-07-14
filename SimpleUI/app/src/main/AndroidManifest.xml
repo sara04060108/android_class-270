@@ -9,12 +9,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
-            <intent-filter>//第一個跑的page
+            <intent-filter>
+                //第一個跑的page
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".DrinkMenuActivity"></activity>
     </application>
 
 </manifest>
