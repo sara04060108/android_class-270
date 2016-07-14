@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public  void goToMenu(View view){
+    public  void goToMenu(View view){//跳頁
         Intent intent = new Intent();
         intent.setClass(this,DrinkMenuActivity.class);
         startActivity(intent);
