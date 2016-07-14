@@ -1,5 +1,6 @@
 package com.example.user.simpleui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +81,19 @@ public class DrinkMenuActivity extends AppCompatActivity {
         totalTextView.setText(String.valueOf(total));
     }
 
+    public void done(View view){//view是button的變數
+        Intent intent = new Intent();//intent帶回去會有限制
+        //{"name":"Black Tea"}把每一個drink轉成jseropject(Drink.java)
+        JSONArray jsonArray = new JSONArray();
+        for(Drink drink:orders)
+        {
+            JSONObject jsonObject = drink.getJsonObject();
+            jsonArray.put(jsonObject);
+        }
+        intent.putExtra("results",jsonArray.toString());
+        setResult(RESULT_OK,intent);
+        finish();//結束就要直接回上一頁
+    }
     @Override
     protected void onStart(){
         super.onStart();

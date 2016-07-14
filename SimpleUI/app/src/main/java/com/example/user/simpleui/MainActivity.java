@@ -13,11 +13,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    static final  int REQUEST_CODE_DRINK_MENU_ACTIVITY = 0;
 
     TextView textView;
     EditText editText;
@@ -111,7 +114,21 @@ public class MainActivity extends AppCompatActivity {
     public  void goToMenu(View view){//跳頁
         Intent intent = new Intent();
         intent.setClass(this,DrinkMenuActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent,REQUEST_CODE_DRINK_MENU_ACTIVITY);//知道下一頁會回來至這頁
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_DRINK_MENU_ACTIVITY)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                Toast.makeText(this,"完成菜單",Toast.LENGTH_SHORT).show();//3是顯示長度
+                textView.setText(data.getStringExtra("results"));
+            }
+        }
     }
 
     @Override
