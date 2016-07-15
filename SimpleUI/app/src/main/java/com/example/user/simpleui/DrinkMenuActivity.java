@@ -1,6 +1,10 @@
 package com.example.user.simpleui;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +19,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DrinkMenuActivity extends AppCompatActivity {
+public class DrinkMenuActivity extends AppCompatActivity implements  DrinnkOrderDialog.OnDrinkOrderListener{
 
     TextView totalTextView;
     ListView drinkMenuListView;
@@ -65,11 +69,28 @@ public class DrinkMenuActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DrinkAdapter drinkAdapter = (DrinkAdapter)parent.getAdapter();
                 Drink drink = (Drink)drinkAdapter.getItem(position);//拿出資訊
-                orders.add(drink);//丟進orders中
-                updateTotal();//呼叫updateTotal
+                shewDrinkOrderDialog(drink);
+                /*orders.add(drink);//丟進orders中
+                updateTotal();//呼叫updateTotal*/
             }
         });
 
+    }
+
+
+    public  void shewDrinkOrderDialog(Drink drink){
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();//一筆交易
+
+        DrinnkOrderDialog dialog = DrinnkOrderDialog.newInstance("","");
+        Fragment prev = getFragmentManager().findFragmentByTag("DrinkOrderDialog");
+        if(prev != null){
+            ft.remove(prev);
+        }
+
+        ft.addToBackStack(null);//支援back鍵
+
+        dialog.show(ft,"DrinkOrderDialog");
     }
 
     public void  updateTotal(){
@@ -126,4 +147,8 @@ public class DrinkMenuActivity extends AppCompatActivity {
         Log.d("Debug", "DrinkMainActivity onRestart");
     }
 
+    @Override
+    public void onDrinkOrderFinish(Uri uri) {
+
+    }
 }
