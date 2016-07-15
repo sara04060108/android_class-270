@@ -93,7 +93,7 @@ public class DrinnkOrderDialog extends DialogFragment {
                         public void onClick(DialogInterface dialog, int which) {
 
                         }
-                    }).setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
