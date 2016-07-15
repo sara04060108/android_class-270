@@ -24,4 +24,17 @@ public class Drink
         }
         return jsonObject;
     }
+
+    public static Drink newInstanceWithData(String data){
+        Drink drink = new Drink();
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            drink.name = jsonObject.getString("name");
+            drink.IPrice = jsonObject.getInt("IPrice");
+            drink.mPrice = jsonObject.getInt("mPrice");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return drink;
+    }
 }

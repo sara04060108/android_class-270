@@ -30,7 +30,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements  DrinnkOrder
     int[] imageId = {R.drawable.drink1,R.drawable.drink2,R.drawable.drink3,R.drawable.drink4};
 
     List<Drink> drinks = new ArrayList<>();
-    List<Drink> orders = new ArrayList<>();//使用者按下之後的訂單資料
+    List<DrinkOrder> orders = new ArrayList<>();//使用者按下之後的訂單資料
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +79,13 @@ public class DrinkMenuActivity extends AppCompatActivity implements  DrinnkOrder
 
 
     public  void shewDrinkOrderDialog(Drink drink){
+
+        DrinkOrder drinkOrder = new DrinkOrder(drink);
+
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();//一筆交易
 
-        DrinnkOrderDialog dialog = DrinnkOrderDialog.newInstance("","");
+        DrinnkOrderDialog dialog = DrinnkOrderDialog.newInstance(drinkOrder);
         Fragment prev = getFragmentManager().findFragmentByTag("DrinkOrderDialog");
         if(prev != null){
             ft.remove(prev);
@@ -95,8 +98,8 @@ public class DrinkMenuActivity extends AppCompatActivity implements  DrinnkOrder
 
     public void  updateTotal(){
         int total = 0;
-        for(Drink drink:orders){
-            total = total+drink.mPrice;
+        for(DrinkOrder order:orders){
+            total += order.mNumber*order.drink.mPrice+order.INumber*order.drink.IPrice;
         }
 
         totalTextView.setText(String.valueOf(total));
@@ -106,10 +109,10 @@ public class DrinkMenuActivity extends AppCompatActivity implements  DrinnkOrder
         Intent intent = new Intent();//intent帶回去會有限制
         //{"name":"Black Tea"}把每一個drink轉成jseropject(Drink.java)
         JSONArray jsonArray = new JSONArray();
-        for(Drink drink:orders)
+        for(DrinkOrder order:orders)
         {
-            JSONObject jsonObject = drink.getJsonObject();
-            jsonArray.put(jsonObject);
+            String data = order.toData();
+            jsonArray.put(data);
         }
         intent.putExtra("results",jsonArray.toString());
         setResult(RESULT_OK,intent);
@@ -148,7 +151,20 @@ public class DrinkMenuActivity extends AppCompatActivity implements  DrinnkOrder
     }
 
     @Override
-    public void onDrinkOrderFinish(Uri uri) {
+    public void onDrinkOrderFinish(DrinkOrder drinkOrder) {
+        Boolean flag =false;
+        for(int index = 0;index<orders.size();index++){
+            if(orders.get(index).drink.name.equals(drinkOrder.drink.name)){
+                orders.set(index,drinkOrder);
+                flag = true;
+                break;
+            }
+        }
+        if(flag)
+        orders.add(drinkOrder);
 
+        updateTotal();
     }
+
+
 }

@@ -43,16 +43,15 @@ public class DrinnkOrderDialog extends DialogFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+
      * @return A new instance of fragment DrinnkOrderDialog.
      */
     // TODO: Rename and change types and number of parameters
-    public static DrinnkOrderDialog newInstance(String param1, String param2) {
+    public static DrinnkOrderDialog newInstance(DrinkOrder drinkOrder) {
         DrinnkOrderDialog fragment = new DrinnkOrderDialog();
         Bundle args = new Bundle();//可將資料帶入的方法，與intent(Activity之間)一樣
-        args.putString(ARG_PARAM1, param1);//定義key值(ATG_PARAM1)，用變數替代，避免打錯
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, drinkOrder.toData());//定義key值(ATG_PARAM1)，用變數替代，避免打錯
+        //drinkorder中要實作toData()
         fragment.setArguments(args);
         return fragment;
     }
@@ -80,6 +79,11 @@ public class DrinnkOrderDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         if(getArguments() != null){
             Bundle bundle = getArguments();
+            String data = bundle.getString(ARG_PARAM1);
+            DrinkOrder drinkOrder = DrinkOrder.newInstanceWithData(data);
+            if(drinkOrder == null){
+                throw new RuntimeException("Instance Drink Order Fail");
+            }
         }
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
@@ -94,11 +98,11 @@ public class DrinnkOrderDialog extends DialogFragment {
 
                         }
                     }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
-                        }
-                    });
+            }
+        });
         return alertDialogBuilder.create();
     }
 
@@ -131,7 +135,7 @@ public class DrinnkOrderDialog extends DialogFragment {
      */
     public interface OnDrinkOrderListener {//實作介面
         // TODO: Update argument type and name
-        void onDrinkOrderFinish(Uri uri);
+        void onDrinkOrderFinish(DrinkOrder drinkOrder);
     }
 }
 //Fragment間的溝通由Activity做調配\
