@@ -1,6 +1,7 @@
 package com.example.user.simpleui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,12 @@ public class MainActivity extends AppCompatActivity {
 
     String selectTea = "black tea";
 
+    String menuResult = "";
+
+    SharedPreferences sharedPreferences;
+    //要改資料需要editor
+    SharedPreferences.Editor editor;
+
     List<Order> orders = new ArrayList<>();//放訂單的位置
 
 
@@ -45,9 +52,18 @@ public class MainActivity extends AppCompatActivity {
         listView = (ListView)findViewById(R.id.listView);
         spinner = (Spinner)findViewById(R.id.spinner);
 
+        sharedPreferences = getSharedPreferences("setting", MODE_PRIVATE);//private覆蓋 append疊加
+        editor = sharedPreferences.edit();
+
+        editText.setText(sharedPreferences.getString("editText",null));//傳進editText若沒有null
+
         editText.setOnKeyListener(new View.OnKeyListener() {//監聽editText
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+                //把打進的字放入sharedPreferences
+                String text = editText.getText().toString();
+                editor.putString("editText",text);
+                editor.commit();//寫進xml
                 if(keyCode == KeyEvent.KEYCODE_ENTER && event.getAction()== KeyEvent.ACTION_DOWN){//偵測Enter按下去的瞬間(Action down)
 
                     submit(v);
@@ -100,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         Order order = new Order();
         order.note = text;
-        order.drinkName = selectTea;
+        order.menuResult = menuResult;
         order.storeInfo = (String)spinner.getSelectedItem();
 
         orders.add(order);
@@ -108,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         setupListView();
 
         editText.setText("");//清空editText
-
+        menuResult = "";//每次結束清空字串
     }
 
     public  void goToMenu(View view){//跳頁
@@ -126,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK)
             {
                 Toast.makeText(this,"完成菜單",Toast.LENGTH_SHORT).show();//3是顯示長度
-                textView.setText(data.getStringExtra("results"));
+                menuResult = data.getStringExtra("results");//放入menuResult
             }
         }
     }

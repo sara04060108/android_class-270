@@ -85,7 +85,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements  DrinnkOrder
             if(order.drink.name.equals(drink.name)){
 
                 //傳進來的飲料名稱等於現在的飲料名稱
-                drinkOrder = order;
+                drinkOrder = order;//資料覆蓋
                 break;
             }
         }
