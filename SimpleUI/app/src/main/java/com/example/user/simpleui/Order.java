@@ -9,17 +9,45 @@ import org.json.JSONObject;
  */
 public class Order {
     String note;
-    String menuResult;//drinkName改menuresult
+    String menuResults;//drinkName改menuresults
     String storeInfo;
+
+    public  String toData(){
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("note",note);
+            jsonObject.put("menuResults",menuResults);
+            jsonObject.put("storeInfo",storeInfo);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return  jsonObject.toString();
+    }
+
+    public static Order newInstanceData(String data){
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            Order order = new Order();
+            order.note = jsonObject.getString("note");
+            order.menuResults = jsonObject.getString("menuResults");
+            order.storeInfo = jsonObject.getString("storeInfo");
+
+            return order;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     //統計杯數
     public  int totalNumber(){
-        if(menuResult == null || menuResult.equals("")){
+        if(menuResults == null || menuResults.equals("")){
             return 0;
         }
 
         try {
-            JSONArray jsonArray = new JSONArray(menuResult);
+            JSONArray jsonArray = new JSONArray(menuResults);
             int totalNumber = 0;
             for(int i=0;i<jsonArray.length();i++){
                 String data = jsonArray.getString(i);

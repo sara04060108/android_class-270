@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     String selectTea = "black tea";
 
-    String menuResult = "";
+    String menuResults = "";
 
     SharedPreferences sharedPreferences;
     //要改資料需要editor
@@ -55,16 +55,16 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("setting", MODE_PRIVATE);//private覆蓋 append疊加
         editor = sharedPreferences.edit();
 
-        editText.setText(sharedPreferences.getString("editText",null));//傳進editText若沒有null
+        editText.setText(sharedPreferences.getString("editText", null));//傳進editText若沒有null
 
         editText.setOnKeyListener(new View.OnKeyListener() {//監聽editText
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 //把打進的字放入sharedPreferences
                 String text = editText.getText().toString();
-                editor.putString("editText",text);
+                editor.putString("editText", text);
                 editor.commit();//寫進xml
-                if(keyCode == KeyEvent.KEYCODE_ENTER && event.getAction()== KeyEvent.ACTION_DOWN){//偵測Enter按下去的瞬間(Action down)
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {//偵測Enter按下去的瞬間(Action down)
 
                     submit(v);
                     return true;//攔截這個字，若沒有這行，按Ｅnter仍會跳行
@@ -80,6 +80,15 @@ public class MainActivity extends AppCompatActivity {
                 selectTea = radioButton.getText().toString();
             }
         });
+
+        String history = Utils.readFile(this,"history");//讀出history
+        String[] datas = history.split("\n");//每換一行即為新的訂單
+        for(String data:datas){
+            Order order = Order.newInstanceData(data);
+            if(order != null) {
+                orders.add(order);
+            }
+        }
 
         setupListView();
         setupSpinner();
@@ -116,15 +125,17 @@ public class MainActivity extends AppCompatActivity {
 
         Order order = new Order();
         order.note = text;
-        order.menuResult = menuResult;
+        order.menuResults = menuResults;
         order.storeInfo = (String)spinner.getSelectedItem();
 
         orders.add(order);
 
+        Utils.writeFile(this, "history", order.toData() + "\n");
+
         setupListView();
 
         editText.setText("");//清空editText
-        menuResult = "";//每次結束清空字串
+        menuResults = "";//每次結束清空字串
     }
 
     public  void goToMenu(View view){//跳頁
@@ -142,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK)
             {
                 Toast.makeText(this,"完成菜單",Toast.LENGTH_SHORT).show();//3是顯示長度
-                menuResult = data.getStringExtra("results");//放入menuResult
+                menuResults = data.getStringExtra("results");//放入menuResult
             }
         }
     }
