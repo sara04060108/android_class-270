@@ -79,8 +79,18 @@ public class DrinkMenuActivity extends AppCompatActivity implements  DrinnkOrder
 
 
     public  void shewDrinkOrderDialog(Drink drink){
-
         DrinkOrder drinkOrder = new DrinkOrder(drink);
+
+        for(DrinkOrder order:orders){
+            if(order.drink.name.equals(drink.name)){
+
+                //傳進來的飲料名稱等於現在的飲料名稱
+                drinkOrder = order;
+                break;
+            }
+        }
+
+
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();//一筆交易
@@ -160,7 +170,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements  DrinnkOrder
                 break;
             }
         }
-        if(flag)
+        if(flag!=true)//如果之前沒訂單就加入
         orders.add(drinkOrder);
 
         updateTotal();
