@@ -1,7 +1,10 @@
 package com.example.user.simpleui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -131,14 +134,35 @@ public class MainActivity extends AppCompatActivity {
         //adapter轉換器
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,data);//simple_list_item_1 android自訂UI(第二個是layout檔) 存進layout(第三個)
 
-        Order.getOrderFromRemote(new FindCallback<Order>() {
+
+        ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);//檢察連線狀態
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+        FindCallback<Order> callback = new FindCallback<Order>() {
             @Override
             public void done(List<Order> objects, ParseException e) {
-                orders = objects;
-                OrderAdapter adapter = new OrderAdapter(MainActivity.this,orders);
-                listView.setAdapter(adapter);
+                if(e == null){
+                    orders = objects;
+                    OrderAdapter adapter = new OrderAdapter(MainActivity.this,orders);
+                    listView.setAdapter(adapter);
+                }
             }
-        });
+        };
+
+        if(networkInfo ==null|| !networkInfo.isConnected())
+        {//如果還沒連線
+            Order.getQuery().fromLocalDatastore().findInBackground(callback);//從local端取資料
+        }else{
+            Order.getOrderFromRemote(callback);
+        }
+//        Order.getOrderFromRemote(new FindCallback<Order>() {
+//            @Override
+//            public void done(List<Order> objects, ParseException e) {//回傳網路上得訂單
+//                orders = objects;
+//                OrderAdapter adapter = new OrderAdapter(MainActivity.this,orders);
+//                listView.setAdapter(adapter);
+//            }
+//        });
 
         OrderAdapter adapter = new OrderAdapter(this,orders);
         listView.setAdapter(adapter);
@@ -164,7 +188,9 @@ public class MainActivity extends AppCompatActivity {
         order.setMenuResults(menuResults);
         order.setStoreInfo((String) spinner.getSelectedItem());
 
-        order.saveInBackground();//上傳資料
+
+        order.pinInBackground("Order");//資料存在local端
+        order.saveEventually();//有網路時上傳
 
         orders.add(order);
 

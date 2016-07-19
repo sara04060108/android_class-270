@@ -102,7 +102,7 @@ public class DrinnkOrderDialog extends DialogFragment {
         View contextView = getActivity().getLayoutInflater().inflate(R.layout.fragment_drinnk_order_dialog,null);
 
         alertDialogBuilder.setView(contextView)
-                    .setTitle(drinkOrder.drink.name)
+                    .setTitle(drinkOrder.drink.getName())
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

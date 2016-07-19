@@ -52,9 +52,9 @@ public class DrinkMenuActivity extends AppCompatActivity implements  DrinnkOrder
     private  void  setData(){
         for(int i = 0;i<names.length;i++){
             Drink drink = new Drink();
-            drink.name = names[i];
-            drink.mPrice = mPrice[i];
-            drink.IPrice = IPrice[i];
+            drink.setName(names[i]);
+            drink.setmPrice(mPrice[i]);
+            drink.setIPrice(IPrice[i]);
             drink.imageId = imageId[i];
             drinks.add(drink);
         }
@@ -82,7 +82,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements  DrinnkOrder
         DrinkOrder drinkOrder = new DrinkOrder(drink);
 
         for(DrinkOrder order:orders){
-            if(order.drink.name.equals(drink.name)){
+            if(order.drink.getName().equals(drink.getName())){
 
                 //傳進來的飲料名稱等於現在的飲料名稱
                 drinkOrder = order;//資料覆蓋
@@ -109,7 +109,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements  DrinnkOrder
     public void  updateTotal(){
         int total = 0;
         for(DrinkOrder order:orders){
-            total += order.mNumber*order.drink.mPrice+order.INumber*order.drink.IPrice;
+            total += order.mNumber*order.drink.getmPrice()+order.INumber*order.drink.getIPrice();
         }
 
         totalTextView.setText(String.valueOf(total));
@@ -164,7 +164,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements  DrinnkOrder
     public void onDrinkOrderFinish(DrinkOrder drinkOrder) {
         Boolean flag =false;
         for(int index = 0;index<orders.size();index++){
-            if(orders.get(index).drink.name.equals(drinkOrder.drink.name)){
+            if(orders.get(index).drink.getName().equals(drinkOrder.drink.getName())){
                 orders.set(index,drinkOrder);
                 flag = true;
                 break;
