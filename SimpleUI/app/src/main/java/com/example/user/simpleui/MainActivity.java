@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -98,6 +99,13 @@ public class MainActivity extends AppCompatActivity {
 //                orders.add(order);
 //            }
 //        }
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Order order =(Order)parent.getAdapter().getItem(position);
+                gotoDetail(order);
+            }
+        });
 
         setupListView();
         setupSpinner();
@@ -212,6 +220,15 @@ public class MainActivity extends AppCompatActivity {
         intent.setClass(this,DrinkMenuActivity.class);
         startActivityForResult(intent,REQUEST_CODE_DRINK_MENU_ACTIVITY);//知道下一頁會回來至這頁
 
+    }
+
+    public  void  gotoDetail(Order order){
+        Intent intent = new Intent();
+        intent.setClass(this,OrderDetailActivity.class);
+        intent.putExtra("note",order.getNote());
+        intent.putExtra("storeInfo",order.getStoreInfo());
+        intent.putExtra("menuResults",order.getMenuResults());
+        startActivity(intent);
     }
 
     @Override
