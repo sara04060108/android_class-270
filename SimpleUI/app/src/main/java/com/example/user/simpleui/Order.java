@@ -108,6 +108,7 @@ public class Order extends ParseObject{
             public void done(List<Order> objects, ParseException e) {
                 if(e == null){
                     Order.pinAllInBackground("Order",objects);
+                    callback.done(objects,e);
                 }else {
                     Order.getQuery().fromLocalDatastore().findInBackground(callback);
                 }

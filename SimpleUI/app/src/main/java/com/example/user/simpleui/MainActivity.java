@@ -190,13 +190,18 @@ public class MainActivity extends AppCompatActivity {
 
 
         order.pinInBackground("Order");//資料存在local端
-        order.saveEventually();//有網路時上傳
+        order.saveEventually(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                setupListView();
+            }
+        });//有網路時上傳
 
         orders.add(order);
 
         Utils.writeFile(this, "history", order.toData() + "\n");
 
-        setupListView();
+
 
         editText.setText("");//清空editText
         menuResults = "";//每次結束清空字串
