@@ -1,5 +1,6 @@
 package com.example.user.simpleui;
 
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -79,14 +80,29 @@ public class Drink extends ParseObject
 
     public  static ParseQuery<Drink> getQuery(){return ParseQuery.getQuery(Drink.class);}
 
-    public static void saveDrinkFromRemote(final FindCallback<Drink> callback){
-        Drink.getQuery().findInBackground(new FindCallback<Drink>() {
+    public static void saveDrinkFromRemote(final FindCallback<Drink> callback)
+    {
+        Drink.getQuery().findInBackground(new FindCallback<Drink>()
+        {
             @Override
-            public void done(List<Drink> objects, ParseException e) {
-
-                        if(e ==null){
-                            callback.done(objects,e);
+            public void done(final List<Drink> objects, ParseException e)
+            {
+                if(e ==null)
+                {
+                    Drink.unpinAllInBackground("Drink", new DeleteCallback() {//local端先刪掉，以保證跟網路一樣
+                        @Override
+                        public void done(ParseException e) {
+                            if(e==null)
+                            {
+                                Drink.pinAllInBackground("Drink",objects);//載下來無錯誤的話放入資料
+                            }
                         }
+                    });
+                    callback.done(objects, e);
+                }else
+                {
+                   Drink.getQuery().fromLocalDatastore().findInBackground(callback);
+                }
             }
         });
     }
