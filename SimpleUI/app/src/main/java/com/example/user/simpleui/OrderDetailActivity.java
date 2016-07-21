@@ -2,15 +2,27 @@ package com.example.user.simpleui;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Camera;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.logging.Handler;
 
-public class OrderDetailActivity extends AppCompatActivity {
+public class OrderDetailActivity extends AppCompatActivity implements GeoCodingTask.GeoCodingResponse{
+
+    GoogleMap googleMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +37,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         TextView noteTextView = (TextView)findViewById(R.id.noteTextView);
         TextView storeInfoTextView = (TextView)findViewById(R.id.storeInfoTextView);
         TextView menuResultsTextView = (TextView)findViewById(R.id.menuResultsTextView);
+        ImageView staticMapImageView = (ImageView)findViewById(R.id.googleMapImageView);
 
         noteTextView.setText(note);
         storeInfoTextView.setText(storeInfo);
@@ -40,19 +53,53 @@ public class OrderDetailActivity extends AppCompatActivity {
         }
         menuResultsTextView.setText(text);
 
-    }
-    public  static  class GeoDodingTask extends AsyncTask<String,Void,Bitmap>{
+        MapFragment mapFragment = (MapFragment)getFragmentManager().findFragmentById(R.id.mapFragment);
 
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            String address = params[0];
-            double[] latlng = Utils.getLagLngFromGoogleMapAPI(address);
-            return null;
-        }
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap map) {
+                googleMap = map;
 
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
+                (new GeoCodingTask(OrderDetailActivity.this)).execute("台北市大安區羅斯福路四段一號");
+            }
+        });
+
+
+
+    }
+
+    @Override
+    public void responseWithGeoCondingResults(LatLng latLng) {
+        if(googleMap != null){
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng,17);
+   //         googleMap.animateCamera(cameraUpdate);
+            googleMap.moveCamera(cameraUpdate);
         }
     }
+
+//    public  static  class GeoCodingTask extends AsyncTask<String,Void,Bitmap>{
+//
+//        WeakReference<ImageView> imageViewWeakReference;
+//
+//        @Override
+//        protected Bitmap doInBackground(String... params) {
+//            String address = params[0];
+//            double[] latlng = Utils.getLagLngFromGoogleMapAPI(address);
+//            return Utils.getStaticMap(latlng);
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Bitmap bitmap) {
+//
+//            super.onPostExecute(bitmap);
+//            if(imageViewWeakReference.get() != null && bitmap!=null){
+//                ImageView imageView = imageViewWeakReference.get();
+//                imageView.setImageBitmap(bitmap);
+//            }
+//        }
+//
+//        public  GeoCodingTask(ImageView imageView){
+//            this.imageViewWeakReference = new WeakReference<ImageView>(imageView);
+//        }
+//    }
 }

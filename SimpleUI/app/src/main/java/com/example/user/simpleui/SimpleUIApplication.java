@@ -16,9 +16,9 @@ public class SimpleUIApplication extends Application {
         ParseObject.registerSubclass(Order.class);//可認得Orderclass物件
         ParseObject.registerSubclass(Drink.class);
         Parse.initialize(new Parse.Configuration.Builder(this)
-                .applicationId("tCpi53em9xNwNTCSOzXkGNqlhCfpa8fPqdYYPbvX")
-                .server("https://parseapi.back4app.com/")
-                .clientKey("sp3Lt8xh55WGfIAWr8Gdl3gIsAWvo3BJVH6Fgo3K")
+                .applicationId("76ee57f8e5f8bd628cc9586e93d428d5")
+                .server("http://parseserver-ps662-env.us-east-1.elasticbeanstalk.com/parse/")
+                //.clientKey("sp3Lt8xh55WGfIAWr8Gdl3gIsAWvo3BJVH6Fgo3K")
                 .enableLocalDataStore()//localdatabase功能
                 .build());
     }

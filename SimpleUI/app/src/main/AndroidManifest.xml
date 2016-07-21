@@ -12,6 +12,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBlToZFfNglv4FeKvt9w-NCPE-CFNYp4Hk"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 //第一個跑的page
@@ -23,5 +26,6 @@
         <activity android:name=".DrinkMenuActivity" />
         <activity android:name=".OrderDetailActivity"></activity>
     </application>
+    //AIzaSyBlToZFfNglv4FeKvt9w-NCPE-CFNYp4Hk
 
 </manifest>
