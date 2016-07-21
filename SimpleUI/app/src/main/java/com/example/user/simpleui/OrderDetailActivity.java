@@ -15,6 +15,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -69,10 +71,23 @@ public class OrderDetailActivity extends AppCompatActivity implements GeoCodingT
     }
 
     @Override
-    public void responseWithGeoCondingResults(LatLng latLng) {
+    public void responseWithGeoCondingResults(LatLng latlng) {
         if(googleMap != null){
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng,17);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latlng,17);
    //         googleMap.animateCamera(cameraUpdate);
+            MarkerOptions markerOptions = new MarkerOptions().position(latlng).title("台灣大學").snippet("Hello Google Map");
+            googleMap.addMarker(markerOptions);
+
+            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+
+                    CameraUpdate cp = CameraUpdateFactory.newLatLngZoom(marker.getPosition(),21);//點擊放大成21
+                    googleMap.moveCamera(cp);
+                    return false;
+                }
+            });
+
             googleMap.moveCamera(cameraUpdate);
         }
     }
