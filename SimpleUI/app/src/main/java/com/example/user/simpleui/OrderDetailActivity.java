@@ -207,7 +207,43 @@ public class OrderDetailActivity extends AppCompatActivity implements GeoCodingT
             marker = googleMap.addMarker(markerOptions);
         }
         else
-        {marker.setPosition(currentLatLng);
+        {
+            marker.setPosition(currentLatLng);
+        }
+
+        if (polylines.size()>0){
+            for(Polyline polyline:polylines)
+            {
+                List<LatLng> points = polyline.getPoints();
+                int index = -1;
+                for (int i = 0;i<points.size();i++)
+                {
+                    if(i!=points.size()-1)
+                    {
+
+                        LatLng point1 = points.get(i);
+                        LatLng point2 = points.get(i+1);
+
+                        Double maxLat = Math.max(point1.latitude, point2.latitude);
+                        Double minLat = Math.min(point1.latitude, point2.latitude);
+                        Double maxLng = Math.max(point1.latitude, point2.latitude);
+                        Double minLng = Math.min(point1.latitude, point2.latitude);
+                        if (currentLatLng.latitude >= minLat && currentLatLng.latitude < maxLat && currentLatLng.latitude>=minLng && currentLatLng.latitude< maxLng)
+                        {
+                            index = i;
+                            break;
+                        }
+                    }
+
+                }
+                if (index != -1){
+                    for (int i = index-1;i>=0;i--){
+                        points.remove(0);
+                    }
+                    points.set(0,currentLatLng);
+                    polyline.setPoints(points);
+                }
+            }
         }
     }
 
